@@ -3,6 +3,7 @@ package org.example.userservice.services;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.example.userservice.exception.UserAlreadyExistException;
 import org.example.userservice.exception.UserNotFoundException;
 import org.example.userservice.exception.WrongPasswordException;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Service
@@ -22,7 +24,10 @@ public class AuthService {
 
     private UserRepository userRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    SecretKey key = Jwts.SIG.HS256.key().build();
+//    SecretKey key = Jwts.SIG.HS256.key().build();
+    private SecretKey key = Keys.hmacShaKeyFor(
+            "Thisishowinproductionwesetonekeyanditisenvironmentvariable"
+                    .getBytes(StandardCharsets.UTF_8));
     private SessionRepository sessionRepository;
 
     public AuthService(UserRepository userRepository,BCryptPasswordEncoder bCryptPasswordEncoder,SessionRepository sessionRepository) {
